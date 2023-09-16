@@ -22,6 +22,7 @@ const Mainpage = () => {
       const response = await fetch(url + nameQuery + '&appid=a7742852ffdf1480caff7424189579d8');
       if (response.ok) {
         const data = await response.json();
+        //console.log(data);
         setCity(data[0]);
         //the setcity notifies the Jsx the component taht it should re render to update the jsx
 

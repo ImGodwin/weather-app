@@ -7,6 +7,7 @@ const WeatherReport = () => {
   //console.log(param.result);
 
   const [weatherData, setWeatherData] = useState(null);
+  const [forecast, setForecast] = useState(null);
 
   const fetchWeatherResult = async () => {
     try {
@@ -15,9 +16,20 @@ const WeatherReport = () => {
       );
 
       if (weatherResp.ok) {
-        const weatherData = await weatherResp.json();
-        setWeatherData(weatherData);
-        console.log('weather fetched');
+        const weatherInfo = await weatherResp.json();
+        console.log(weatherInfo);
+        setWeatherData(weatherInfo);
+        /* console.log('weather fetched'); */
+
+        const fetchForeCast = await fetch(
+          `api.openweathermap.org/data/2.5/forecast?lat=${param.lat}&lon=${param.lon}&appid=a7742852ffdf1480caff7424189579d8`
+        );
+
+        if (fetchForeCast.ok) {
+          const foreCastResult = await fetchForeCast.json();
+          console.log(foreCastResult);
+          setForecast(foreCastResult);
+        }
       } else {
         console.log('city input incorrect');
       }
@@ -32,7 +44,7 @@ const WeatherReport = () => {
 
   return (
     <Container>
-      {weatherData && (
+      {weatherData && forecast && (
         <Row>
           <Col>
             <Card>
