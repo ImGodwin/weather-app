@@ -1,42 +1,52 @@
 import { useEffect, useState } from 'react';
 import { Card, Col, Container, Row } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
 
-const WeatherReport = ({ city }) => {
-  const [getCity, setGetCity] = useState([]);
+const WeatherReport = () => {
+  const param = useParams();
+  //console.log(param.result);
 
-  const fetchCity = async () => {
+  const [weatherData, setWeatherData] = useState(null);
+
+  const fetchWeatherResult = async () => {
     try {
-      const url2 = `http://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=a7742852ffdf1480caff7424189579d8`;
+      const weatherResp = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?lat=${param.lat}&lon=${param.lon}&appid=a7742852ffdf1480caff7424189579d8`
+      );
 
-      const response = await fetch(url2);
-      if (response.ok) {
-        const data = await response.json();
-        setGetCity(data);
+      if (weatherResp.ok) {
+        const weatherData = await weatherResp.json();
+        setWeatherData(weatherData);
+        console.log('weather fetched');
       } else {
-        console.log('not found');
+        console.log('city input incorrect');
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    fetchCity();
+    fetchWeatherResult();
   }, []);
 
   return (
     <Container>
-      <Row>
-        <Col>
-          <Card>
-            <Card.Img variant="top" src="holder.js/100px180" />
-            <Card.Body>
-              <Card.Title>{getCity.name}</Card.Title>
-              <Card.Text>
-                Some quick example text to build on the card title and make up the bulk of the card's content.
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+      {weatherData && (
+        <Row>
+          <Col>
+            <Card>
+              <Card.Img variant="top" src="holder.js/100px180" />
+              <Card.Body>
+                <Card.Title>{weatherData.name}</Card.Title>
+                <Card.Text>
+                  Some quick example text to build on the card title and make up the bulk of the card's content.
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      )}
     </Container>
   );
 };

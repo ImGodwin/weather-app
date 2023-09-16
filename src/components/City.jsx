@@ -1,10 +1,10 @@
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import WeatherReport from './WeatherReport';
-import { useDispatch } from 'react-redux';
+/* import { useDispatch } from 'react-redux'; */
 
 const City = ({ cityDetail }) => {
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
 
   return (
     <Container>
@@ -14,12 +14,7 @@ const City = ({ cityDetail }) => {
           <h4>View weather report in: {cityDetail.name}</h4>
         </Col>
         <Col>
-          <Link
-            to="/weather-report"
-            onClick={() => {
-              dispatch({ type: 'ADD_TO_CITIES', payload: cityDetail });
-            }}
-          >
+          <Link to={`${cityDetail.lat}/${cityDetail.lon}`}>
             <Button variant="danger">View Report</Button>
           </Link>
         </Col>

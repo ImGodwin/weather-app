@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { Container, Col, Form, FormControl } from 'react-bootstrap';
+import { Container, Col, Form } from 'react-bootstrap';
 import City from './City';
 import WeatherReport from './WeatherReport';
 
 const Mainpage = () => {
   const [nameQuery, setNameQuery] = useState('');
-  const [city, setCity] = useState([]);
+  const [city, setCity] = useState(null);
+  /*  const [weatherData, setWeatherData] = useState(null); */
+
+  //always initialize an object as null
 
   const url = 'http://api.openweathermap.org/geo/1.0/direct?q=';
 
@@ -16,10 +19,23 @@ const Mainpage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(url + nameQuery + '&limit=6&appid=a7742852ffdf1480caff7424189579d8');
+      const response = await fetch(url + nameQuery + '&appid=a7742852ffdf1480caff7424189579d8');
       if (response.ok) {
         const data = await response.json();
-        setCity(data);
+        setCity(data[0]);
+        //the setcity notifies the Jsx the component taht it should re render to update the jsx
+
+        /* const { lat, lon } = data[0];
+
+        const weatherResp = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=a7742852ffdf1480caff7424189579d8`
+        );
+
+        if (weatherResp.ok) {
+          const weatherData = await weatherResp.json();
+          setWeatherData(weatherData);
+          console.log('weather fetched');
+        } */
       } else {
         console.log('city input incorrect');
       }
@@ -39,15 +55,13 @@ const Mainpage = () => {
             <Form.Control type="search" placeholder="type and press Enter" value={nameQuery} onChange={handleChange} />
           </Form>
         </Col>
-        <Col>
-          {city.map((cityName, index) => (
-            <City key={`cityName ${index}`} cityDetail={cityName} />
-          ))}
-        </Col>
+        <Col>{city && <City cityDetail={city} />}</Col>
       </Container>
 
-      <WeatherReport cityData={city.name} />
+      {/* {city && <WeatherReport cityLat={city.lat} cityLon={city.lot} />} */}
     </>
+
+    //need
   );
 };
 
