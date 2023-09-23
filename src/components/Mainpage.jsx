@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Container, Col, Form } from 'react-bootstrap';
+import { Container, Col, Form, Row } from 'react-bootstrap';
 import City from './City';
 import WeatherReport from './WeatherReport';
+import DateAndTime from './DateAndTime';
 
 const Mainpage = () => {
   const [nameQuery, setNameQuery] = useState('');
@@ -25,20 +26,8 @@ const Mainpage = () => {
         //console.log(data);
         setCity(data[0]);
         //the setcity notifies the Jsx the component taht it should re render to update the jsx
-
-        /* const { lat, lon } = data[0];
-
-        const weatherResp = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=a7742852ffdf1480caff7424189579d8`
-        );
-
-        if (weatherResp.ok) {
-          const weatherData = await weatherResp.json();
-          setWeatherData(weatherData);
-          console.log('weather fetched');
-        } */
       } else {
-        console.log('city input incorrect');
+        //console.log('city input incorrect');
       }
     } catch (error) {
       console.log(error);
@@ -47,16 +36,26 @@ const Mainpage = () => {
 
   return (
     <>
-      <Container className="align-self-center">
-        <Col>
-          <h1>Type Location:</h1>
-        </Col>
+      <DateAndTime />
+      <Container className="align-self-center my-5 w-50">
+        <Row className="d-flex">
+          <Col>
+            <h1>Type Location:</h1>
+            <Col></Col>
+          </Col>
+        </Row>
+
         <Col>
           <Form onSubmit={handleSubmit}>
-            <Form.Control type="search" placeholder="type and press Enter" value={nameQuery} onChange={handleChange} />
+            <Form.Control
+              type="search"
+              placeholder="type city name and press Enter"
+              value={nameQuery}
+              onChange={handleChange}
+            />
           </Form>
         </Col>
-        <Col>{city && <City cityDetail={city} />}</Col>
+        <Col>{city && <City cityDetail={city} nameQuery={nameQuery} />}</Col>
       </Container>
 
       {/* {city && <WeatherReport cityLat={city.lat} cityLon={city.lot} />} */}

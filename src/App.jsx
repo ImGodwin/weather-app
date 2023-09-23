@@ -3,6 +3,7 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Mainpage from './components/Mainpage';
 import WeatherReport from './components/WeatherReport';
+import DateAndTime from './components/DateAndTime';
 
 function App() {
   return (
